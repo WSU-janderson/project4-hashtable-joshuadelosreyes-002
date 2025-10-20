@@ -1,11 +1,13 @@
 /**
- * HashTableDebug.cpp
+ *	HashTableDebug.cpp
  *
- * Write your tests in this file
+ *	Write your tests in this file.
  */
+
+#include "HashTable.h"
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
+	return 0;
 }
