@@ -5,9 +5,9 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-#include <string>
 #include <vector>
 #include <optional>
+#include "HashTableBucket.h"
 
 class HashTable {
 	public:
@@ -31,7 +31,7 @@ class HashTable {
 		friend std::ostream & operator<<(std::ostream &os, const HashTable &hashTable);
 
 	private:
-
+		std::vector<HashTableBucket> tableData;
 };
 
 #endif
