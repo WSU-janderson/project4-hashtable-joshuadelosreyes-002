@@ -10,8 +10,22 @@
 class HashTableBucket {
 	private:
 		enum class BucketType {
+
+			/**
+			 *	The bucket is non-empty and currently storing a
+			 *	key-value pair.
+			 */
 			NORMAL,
+
+			/**
+			 *	The bucket has never had a key-value pair.
+			 */
 			ESS,
+
+			/**
+			 *	The bucket previously stored a key-value pair, but
+			 *	that pair was removed from the table.
+			 */
 			EAR
 		};
 
