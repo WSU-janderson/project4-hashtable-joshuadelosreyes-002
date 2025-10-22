@@ -1,8 +1,11 @@
 /**
  *	HashTableBucket.cpp
+ *
+ *	Definitions of all the methods declared in the HashTableBucket class.
  */
 
 #include "HashTableBucket.h"
+#include <iostream>
 
 /**
  *	The default constructor sets the bucket type to `ESS`
@@ -48,4 +51,23 @@ bool HashTableBucket::isEmptySinceStart() const {
 /** Returns `true` if the bucket type is set to `EAR`. */
 bool HashTableBucket::isEmptyAfterRemove() const {
 	return this->bucketType == EAR;
+}
+
+/**
+ *	Prints a string representation of a bucket which can contain a
+ *	key-value pair. If this bucket is empty, it should indicate the
+ *	bucket type.
+ *
+ *	The key-value pair can be represented as `<key, value>`. 
+ */
+std::ostream & operator<<(std::ostream &os, const HashTableBucket &bucket) {
+	switch (bucket.bucketType) {
+		case HashTableBucket::NORMAL: {
+			os << "<" << bucket.key << ", " << bucket.value << ">";
+		} case HashTableBucket::ESS: {
+			os << "ESS";
+		} case HashTableBucket::EAR: {
+			os << "EAR";
+		}
+	}
 }
