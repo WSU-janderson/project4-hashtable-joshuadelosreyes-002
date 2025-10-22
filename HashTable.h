@@ -31,6 +31,7 @@ class HashTable {
 		friend std::ostream & operator<<(std::ostream &os, const HashTable &hashTable);
 
 	private:
+		std::vector<size_t> offsets;
 		std::vector<HashTableBucket> tableData;
 };
 
