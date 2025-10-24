@@ -11,15 +11,23 @@
 
 class HashTable {
 	public:
-		HashTable(size_t initCapacity = 8);
 
-		bool insert(std::string key, int value);
+		/**
+		 *	Placeholder value to store the default capacity for the hash table.
+		 *
+		 *	Required for `HashTableTests.cpp`.
+		 */
+		static constexpr size_t DEFAULT_INITIAL_CAPACITY = 8;
+
+		HashTable(size_t initCapacity = DEFAULT_INITIAL_CAPACITY);
+
+		bool insert(std::string key, size_t value);
 		bool remove(std::string key);
 		bool contains(const std::string &key) const;
 
-		std::optional<int> get(const std::string &key) const;
+		std::optional<size_t> get(const std::string &key) const;
 
-		int & operator[](const std::string &key);
+		size_t & operator[](const std::string &key);
 
 		std::vector<std::string> keys() const;
 
@@ -33,6 +41,8 @@ class HashTable {
 	private:
 		std::vector<size_t> offsets;
 		std::vector<HashTableBucket> tableData;
+
+		size_t length;
 };
 
 #endif

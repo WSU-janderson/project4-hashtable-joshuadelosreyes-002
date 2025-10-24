@@ -30,16 +30,16 @@ class HashTableBucket {
 		};
 
 		std::string key;
-		int value;
+		size_t value;
 		BucketType bucketType;
 
 	public:
 		using enum BucketType;
 
 		HashTableBucket();
-		HashTableBucket(std::string key, int value);
+		HashTableBucket(std::string key, size_t value);
 
-		void load(std::string key, int value);
+		void load(std::string key, size_t value);
 
 		void makeNormal();
 		void makeESS();

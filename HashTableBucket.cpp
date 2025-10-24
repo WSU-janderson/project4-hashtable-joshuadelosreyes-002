@@ -17,13 +17,13 @@ HashTableBucket::HashTableBucket() : bucketType(ESS) {}
  *	Sets the bucket type to `NORMAL`, as well as initializing
  *	the key and value for this bucket.
  */
-HashTableBucket::HashTableBucket(std::string key, int value) {this->load(key, value);}
+HashTableBucket::HashTableBucket(std::string key, size_t value) {this->load(key, value);}
 
 /**
  * 	A key-value pair is assigned to this bucket, which also sets the
  * 	bucket type to `NORMAL`.
  */
-void HashTableBucket::load(std::string key, int value) {
+void HashTableBucket::load(std::string key, size_t value) {
 	this->makeNormal();
 	this->key = key;
 	this->value = value;
