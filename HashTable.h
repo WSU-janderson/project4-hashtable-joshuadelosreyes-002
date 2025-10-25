@@ -43,6 +43,8 @@ class HashTable {
 		std::vector<HashTableBucket> tableData;
 
 		size_t length;
+
+		void generate_permutation(const size_t length);
 };
 
 #endif
