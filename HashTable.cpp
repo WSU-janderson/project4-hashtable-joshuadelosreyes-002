@@ -55,10 +55,11 @@ void HashTable::generate_permutation(const size_t length) {
 		size_t randomOffset, indexToSwap, temp;
 
 		// Generate an integer between 1 to size - 2.
+		// Offset cannot be 0 for a true swap under a subvector of length (size - 1).
 		randomOffset = 1 + s() % (offsets.size() - 2);
 
 		// Resolve to an index between 1 to size - 1.
-		indexToSwap = 1 + randomOffset % (offsets.size() - 2);
+		indexToSwap = 1 + (i + randomOffset - 1) % (offsets.size() - 1);
 
 		// Then swap the elements between the two indices.
 		temp = offsets[indexToSwap];
