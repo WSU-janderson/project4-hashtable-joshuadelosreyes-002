@@ -215,3 +215,21 @@ size_t & HashTable::operator[](const std::string &key) {
 		} else {++probeIndex; continue;}
 	}
 }
+
+/**
+ *	Returns a vector of keys that are currently in the table.
+ *	Every bucket is traversed in the hash table. If a normal bucket is passed,
+ *	its key gets pushed into the vector.
+ */
+std::vector<std::string> HashTable::keys() const {
+	std::vector<std::string> keyList;
+
+	for (HashTableBucket bucket : this->tableData) {
+		if (!bucket.isEmpty()) {
+			keyList.push_back(bucket.getKey());
+		}
+	}
+
+	keyList.shrink_to_fit();
+	return keyList;
+}
