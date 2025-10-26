@@ -4,6 +4,7 @@
 
 #include "HashTable.h"
 #include <random>
+#include <iostream>
 
 /**
  *	The internal capacity of the hash table is set to the initial
@@ -268,4 +269,27 @@ void HashTable::resize() {
 	}
 
 	this->tableData = newTableData;
+}
+
+/**
+ *	Prints all contents of a hash table by printing each normal bucket.
+ *	Empty buckets are not included in printing.
+ *
+ *	The output representation of a hash table can be seen as:
+ *	`[0: <key0, value0>, 1: <key1, value1>, ...]`
+ *	with each index containing a normal bucket residing in that index.
+ */
+std::ostream & operator<<(std::ostream &os, const HashTable &hashTable) {
+	size_t printedBuckets = 0;
+	os << std::string{"["};
+	for (size_t bucketIndex = 0; bucketIndex < hashTable.capacity(); ++bucketIndex) {
+		if (printedBuckets > 0) {os << std::string{", "};}
+		HashTableBucket bucket = hashTable.tableData[bucketIndex];
+		if (!bucket.isEmpty()) {
+			os << bucketIndex << std::string{": "} << bucket;
+			++printedBuckets;
+		}
+	}
+	os << std::string{"]"};
+	return os;
 }
