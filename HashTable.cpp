@@ -193,4 +193,25 @@ std::optional<size_t> HashTable::get(const std::string &key) const {
 	}
 }
 
+/**
+ *	Returns a reference to the value associated with the specified key.
+ *	If a key is not found in the table, this method is ill-formed, causing
+ *	undesirable behavior.
+ *
+ *	This is different than inserting a new key with its value if the key
+ *	is not in the table.
+ *
+ *	The time complexity is bounded to `O(1) <= T <= O(n)`.
+ */
+size_t & HashTable::operator[](const std::string &key) {
+	const size_t bucketIndex = std::hash<std::string>{}(key) % this->capacity();
 
+	size_t probeIndex = 0, finalBucketIndex;
+	while (true) {
+		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
+		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		if ((bucket.getKey() == key) || bucket.isEmptySinceStart()) {
+			return bucket.value;
+		} else {++probeIndex; continue;}
+	}
+}
