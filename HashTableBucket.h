@@ -37,9 +37,9 @@ class HashTableBucket {
 		using enum BucketType;
 
 		HashTableBucket();
-		HashTableBucket(std::string key, size_t value);
+		HashTableBucket(const std::string &key, const size_t &value);
 
-		void load(std::string key, size_t value);
+		void load(const std::string &key, const size_t &value);
 
 		void makeNormal();
 		void makeESS();

@@ -21,8 +21,8 @@ class HashTable {
 
 		HashTable(size_t initCapacity = DEFAULT_INITIAL_CAPACITY);
 
-		bool insert(std::string key, size_t value);
-		bool remove(std::string key);
+		bool insert(const std::string &key, const size_t &value);
+		bool remove(const std::string &key);
 		bool contains(const std::string &key) const;
 
 		std::optional<size_t> get(const std::string &key) const;
