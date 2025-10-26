@@ -32,9 +32,6 @@ void HashTableBucket::load(const std::string &key, const size_t &value) {
 /** Returns the key contained in this bucket. */
 std::string HashTableBucket::getKey() const {return this->key;}
 
-/** Change the value contained in the bucket specified by `value`. */
-void HashTableBucket::setValue(const size_t &value) {this->value = value;}
-
 /** Sets the bucket type to `NORMAL`. */
 void HashTableBucket::makeNormal() {this->bucketType = NORMAL;}
 

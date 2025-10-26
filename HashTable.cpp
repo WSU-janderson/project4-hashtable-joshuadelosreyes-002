@@ -82,7 +82,7 @@ void HashTable::generate_permutation(const size_t length) {
  *	but the keys themselves are not equal, increment the probe sequence index
  *	until an `EAR` or `ESS` bucket is reached.
  *
- *	At its worst case, the time complexity is at most `O(n)`.
+ *	The time complexity is bounded to `O(1) <= T <= O(n)`.
  */
 bool HashTable::insert(const std::string &key, const size_t &value) {
 	bool uniqueInsert = true;
@@ -117,3 +117,80 @@ bool HashTable::insert(const std::string &key, const size_t &value) {
 	if (this->alpha() >= 0.5) {this->resize();}
 	return uniqueInsert;
 }
+
+/**
+ *	@brief Returns `true` if and only if a specified key exists in the table.
+ *
+ *	Starting with the initial bucket derived from the key's hash, the probes
+ *	are traversed in addition to checking for equality of a bucket's contained
+ *	key. The probes still continue on `EAR` buckets, but it stops if either a
+ *	bucket's contained key is equivalent to the specified key or an `ESS` bucket
+ *	is reached.
+ *
+ *	The time complexity is bounded to `O(1) <= T <= O(n)`.
+ */
+bool HashTable::contains(const std::string &key) const {
+	const size_t bucketIndex = std::hash<std::string>{}(key) % this->capacity();
+
+	size_t probeIndex = 0, finalBucketIndex;
+	while (true) {
+		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
+		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		if (bucket.getKey() == key) {return true;}
+		else if (bucket.isEmptySinceStart()) {return false;}
+		else {++probeIndex; continue;}
+	}
+}
+
+/**
+ *	@brief Returns `true` if and only if a specified key exists in the table,
+ *		in addition, removes that key in the table.
+ *
+ *	A successful removal of a key sets its corresponding bucket to `EAR` and
+ *	decrements `size`.
+ *
+ *	The time complexity is bounded to `O(1) <= T <= O(n)`.
+ */
+bool HashTable::remove(const std::string &key) {
+	bool keyRemoved = false;
+	const size_t bucketIndex = std::hash<std::string>{}(key) % this->capacity();
+
+	size_t probeIndex = 0, finalBucketIndex;
+	while (true) {
+		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
+		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		if ((bucket.getKey() == key) || bucket.isEmptySinceStart()) {
+			keyRemoved |= (bucket.getKey() == key);
+			if (keyRemoved) {bucket.makeEAR();}
+			break;
+		} else {
+			++probeIndex;
+			continue;
+		}
+	}
+
+	if (keyRemoved) {--this->length;}
+	return keyRemoved;
+}
+
+/**
+ *	If the key is found in the table, return the value that is associated with that key.
+ *	Otherwise, returns `nullopt`, which is value-equivalent for `nullptr` without using
+ *	pointers.
+ *
+ *	The time complexity is bounded to `O(1) <= T <= O(n)`.
+ */
+std::optional<size_t> HashTable::get(const std::string &key) const {
+	const size_t bucketIndex = std::hash<std::string>{}(key) % this->capacity();
+
+	size_t probeIndex = 0, finalBucketIndex;
+	while (true) {
+		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
+		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		if (bucket.getKey() == key) {return std::optional<size_t>(bucket.value);}
+		else if (bucket.isEmptySinceStart()) {return std::nullopt;}
+		else {++probeIndex; continue;}
+	}
+}
+
+
