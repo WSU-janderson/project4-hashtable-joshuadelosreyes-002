@@ -45,6 +45,7 @@ class HashTable {
 		size_t length;
 
 		void generate_permutation(const size_t length);
+		void resize();
 };
 
 #endif

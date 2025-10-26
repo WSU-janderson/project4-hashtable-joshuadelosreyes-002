@@ -69,3 +69,51 @@ void HashTable::generate_permutation(const size_t length) {
 
 	this->offsets = offsets;
 }
+
+/**
+ *	@brief Inserts a new key-value pair into the table.
+ *
+ *	Returns `true` if a unique key is inserted. Also `size` is increased.
+ *
+ *	Returns `false` if a duplicate key is attempted to be inserted.
+ *
+ *	The hash code is determined using the key. It is then used modulo capacity
+ *	as the bucket number in probe index `0`. If a probed bucket is occupied
+ *	but the keys themselves are not equal, increment the probe sequence index
+ *	until an `EAR` or `ESS` bucket is reached.
+ *
+ *	At its worst case, the time complexity is at most `O(n)`.
+ */
+bool HashTable::insert(const std::string &key, const size_t &value) {
+	bool uniqueInsert = true;
+
+	/**
+	 *	Determine the hash code for the string.
+	 *	The hash itself modulo capacity is then the initial bucket number.
+	 *	It is also the resolved bucket number at the 0th probe.
+	 */
+	const size_t bucketIndex = std::hash<std::string>{}(key) % this->capacity();
+
+	/**
+	 *	If a bucket is occupied, but the keys themselves are not equal, increment the
+	 *	probe sequence index until an `EAR` or `ESS` bucket is reached.
+	 */
+	size_t probeIndex = 0, finalBucketIndex;
+	while (true) {
+		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
+		HashTableBucket &bucket = this->tableData[finalBucketIndex];
+		if ((bucket.getKey() == key) || bucket.isEmpty()) {
+			uniqueInsert &= (bucket.getKey() != key);
+			if (bucket.isEmpty()) {bucket.load(key, value);}
+			else {bucket.setValue(value);}
+			break;
+		} else {
+			++probeIndex;
+			continue;
+		}
+	}
+
+	if (uniqueInsert) {++this->length;}
+	if (this->alpha() >= 0.5) {this->resize();}
+	return uniqueInsert;
+}

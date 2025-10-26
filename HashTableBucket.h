@@ -41,6 +41,9 @@ class HashTableBucket {
 
 		void load(const std::string &key, const size_t &value);
 
+		std::string getKey() const;
+		void setValue(const size_t &value);
+
 		void makeNormal();
 		void makeESS();
 		void makeEAR();
