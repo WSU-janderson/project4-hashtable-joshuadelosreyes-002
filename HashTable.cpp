@@ -105,7 +105,7 @@ bool HashTable::insert(const std::string &key, const size_t &value) {
 		if ((bucket.getKey() == key) || bucket.isEmpty()) {
 			uniqueInsert &= (bucket.getKey() != key);
 			if (bucket.isEmpty()) {bucket.load(key, value);}
-			else {bucket.setValue(value);}
+			else {bucket.value = value;}
 			break;
 		} else {
 			++probeIndex;
@@ -232,4 +232,40 @@ std::vector<std::string> HashTable::keys() const {
 
 	keyList.shrink_to_fit();
 	return keyList;
+}
+
+/**
+ *	Resizing the hash table changes the effective capacity, usually by doubling
+ *	the current capacity. 
+ *
+ *	Because the capacity is changed, all internal vectors need to be sized
+ *	correctly and to have every normal bucket in the previous vector containing
+ *	table data be transferred to new bucket indices in the new table.
+ */
+void HashTable::resize() {
+	const size_t newSize = this->capacity() * 2;
+	this->generate_permutation(newSize);
+	std::vector<HashTableBucket> newTableData(newSize);
+
+	for (HashTableBucket bucket : this->tableData) {
+		if (!bucket.isEmpty()) {
+			std::string bucketKey = bucket.getKey();
+			const size_t bucketIndex = std::hash<std::string>{}(bucketKey) % newSize;
+
+			size_t probeIndex = 0, finalBucketIndex;
+			while (true) {
+				finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % newSize;
+				HashTableBucket &bucket2 = newTableData[finalBucketIndex];
+				if ((bucket2.getKey() == bucketKey) || bucket2.isEmpty()) {
+					bucket2 = bucket;
+					break;
+				} else {
+					++probeIndex;
+					continue;
+				}
+			}
+		}
+	}
+
+	this->tableData = newTableData;
 }
