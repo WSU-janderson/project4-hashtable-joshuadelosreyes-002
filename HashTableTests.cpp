@@ -60,7 +60,7 @@ using HashTable = Hashtable_t<key_type, value_type>;
 template<typename KeyType, typename IndexType>
 inline KeyType make_key(IndexType i)
 requires std::is_integral_v<IndexType> {
-	if (constexpr std::is_same_v<KeyType, std::string>()) {
+	if constexpr (std::is_same<KeyType, std::string>{}()) {
 		return std::string(1, static_cast<char>('A' + static_cast<unsigned>(i) % 26));
 	} else {
 		return static_cast<KeyType>(i + 1);
@@ -70,7 +70,7 @@ requires std::is_integral_v<IndexType> {
 template<typename ValueType, typename IndexType>
 inline ValueType make_value(IndexType i)
 requires std::is_integral_v<IndexType> {
-	if (constexpr std::is_same_v<ValueType, std::string>()) {
+	if constexpr (std::is_same<ValueType, std::string>{}()) {
 		return std::string(1, static_cast<char>('A' + static_cast<unsigned>(i) % 26));
 	} else {
 		return static_cast<ValueType>(i + 1);
