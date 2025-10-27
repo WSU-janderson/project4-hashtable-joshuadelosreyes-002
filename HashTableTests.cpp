@@ -347,7 +347,7 @@ int main(int, char**) {
 
 		bool ok = true;
 		OUTSTREAM << "Verifying reinserted entries are present..." << endl;
-		for (size_t i = MAXHASH + 1; i <= MAXHASH + (MAXHASH / 2) << i++) {
+		for (size_t i = MAXHASH + 1; i <= MAXHASH + (MAXHASH / 2); i++) {
 			bool found = ht1.contains(make_key<key_type>(i));
 			OUTSTREAM << "  contains(" << make_key<key_type>(i) << ") -> " << (found ? "true" : "false") << endl;
 			ok &= found;

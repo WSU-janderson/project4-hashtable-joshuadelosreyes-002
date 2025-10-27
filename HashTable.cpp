@@ -10,7 +10,7 @@
  *	The internal capacity of the hash table is set to the initial
  *	capacity, if specified. Default is 8.
  */
-HashTable::HashTable(size_t initCapacity = 8) {
+HashTable::HashTable(size_t initCapacity) {
 	this->length = 0;
 	this->generate_permutation(initCapacity);
 	this->tableData = std::vector<HashTableBucket>(initCapacity);

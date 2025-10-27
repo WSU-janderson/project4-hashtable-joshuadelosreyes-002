@@ -73,4 +73,5 @@ std::ostream & operator<<(std::ostream &os, const HashTableBucket &bucket) {
 			os << "EAR";
 		}
 	}
+	return os;
 }
