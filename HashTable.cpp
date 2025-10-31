@@ -166,7 +166,7 @@ bool HashTable::remove(const std::string &key) {
 	size_t probeIndex = 0, finalBucketIndex;
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
-		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		HashTableBucket &bucket = this->tableData[finalBucketIndex];
 		if (normalAndEqual(bucket, key) || bucket.isEmptySinceStart()) {
 			keyRemoved |= (bucket.getKey() == key);
 			if (keyRemoved) {bucket.makeEAR();}
@@ -217,7 +217,7 @@ size_t & HashTable::operator[](const std::string &key) {
 	size_t probeIndex = 0, finalBucketIndex;
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
-		HashTableBucket bucket = this->tableData[finalBucketIndex];
+		HashTableBucket &bucket = this->tableData[finalBucketIndex];
 		if (normalAndEqual(bucket, key) || bucket.isEmptySinceStart()) {
 			return bucket.valueOf();
 		} else {++probeIndex; continue;}
@@ -255,7 +255,7 @@ void HashTable::resize() {
 	this->generate_permutation(newSize);
 	std::vector<HashTableBucket> newTableData(newSize);
 
-	for (HashTableBucket bucket : this->tableData) {
+	for (HashTableBucket &bucket : this->tableData) {
 		if (!bucket.isEmpty()) {
 			std::string bucketKey = bucket.getKey();
 			const size_t bucketIndex = std::hash<std::string>{}(bucketKey) % newSize;
