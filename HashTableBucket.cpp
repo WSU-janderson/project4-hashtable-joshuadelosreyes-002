@@ -26,11 +26,17 @@ HashTableBucket::HashTableBucket(const std::string &key, const size_t &value) {t
 void HashTableBucket::load(const std::string &key, const size_t &value) {
 	this->makeNormal();
 	this->key = key;
-	this->value = value;
+	this->valueOf() = value;
 }
 
 /** Returns the key contained in this bucket. */
 std::string HashTableBucket::getKey() const {return this->key;}
+
+/**
+ *	Returns a reference to a value in this bucket.
+ *	The value of the bucket can be both accessed and mutated.
+ */
+size_t & HashTableBucket::valueOf() {return this->value;}
 
 /** Sets the bucket type to `NORMAL`. */
 void HashTableBucket::makeNormal() {this->bucketType = NORMAL;}
@@ -67,10 +73,13 @@ std::ostream & operator<<(std::ostream &os, const HashTableBucket &bucket) {
 	switch (bucket.bucketType) {
 		case HashTableBucket::NORMAL: {
 			os << "<" << bucket.key << ", " << bucket.value << ">";
+			break;
 		} case HashTableBucket::ESS: {
 			os << "ESS";
+			break;
 		} case HashTableBucket::EAR: {
 			os << "EAR";
+			break;
 		}
 	}
 	return os;

@@ -7,6 +7,13 @@
 #include <iostream>
 
 /**
+ *	Returns `true` if and only if `key` matches the bucket's key and that bucket is nonempty.
+ */
+bool normalAndEqual(const HashTableBucket &bucket, const std::string &key) {
+	return (bucket.getKey() == key) && !bucket.isEmpty();
+}
+
+/**
  *	The internal capacity of the hash table is set to the initial
  *	capacity, if specified. Default is 8.
  */
@@ -106,7 +113,7 @@ bool HashTable::insert(const std::string &key, const size_t &value) {
 		if ((bucket.getKey() == key) || bucket.isEmpty()) {
 			uniqueInsert &= (bucket.getKey() != key);
 			if (bucket.isEmpty()) {bucket.load(key, value);}
-			else {bucket.value = value;}
+			else {bucket.valueOf() = value;}
 			break;
 		} else {
 			++probeIndex;
@@ -137,7 +144,7 @@ bool HashTable::contains(const std::string &key) const {
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
 		HashTableBucket bucket = this->tableData[finalBucketIndex];
-		if (bucket.getKey() == key) {return true;}
+		if (normalAndEqual(bucket, key)) {return true;}
 		else if (bucket.isEmptySinceStart()) {return false;}
 		else {++probeIndex; continue;}
 	}
@@ -160,7 +167,7 @@ bool HashTable::remove(const std::string &key) {
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
 		HashTableBucket bucket = this->tableData[finalBucketIndex];
-		if ((bucket.getKey() == key) || bucket.isEmptySinceStart()) {
+		if (normalAndEqual(bucket, key) || bucket.isEmptySinceStart()) {
 			keyRemoved |= (bucket.getKey() == key);
 			if (keyRemoved) {bucket.makeEAR();}
 			break;
@@ -188,7 +195,7 @@ std::optional<size_t> HashTable::get(const std::string &key) const {
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
 		HashTableBucket bucket = this->tableData[finalBucketIndex];
-		if (bucket.getKey() == key) {return std::optional<size_t>(bucket.value);}
+		if (normalAndEqual(bucket, key)) {return std::optional<size_t>(bucket.valueOf());}
 		else if (bucket.isEmptySinceStart()) {return std::nullopt;}
 		else {++probeIndex; continue;}
 	}
@@ -211,8 +218,8 @@ size_t & HashTable::operator[](const std::string &key) {
 	while (true) {
 		finalBucketIndex = (bucketIndex + this->offsets[probeIndex]) % this->capacity();
 		HashTableBucket bucket = this->tableData[finalBucketIndex];
-		if ((bucket.getKey() == key) || bucket.isEmptySinceStart()) {
-			return bucket.value;
+		if (normalAndEqual(bucket, key) || bucket.isEmptySinceStart()) {
+			return bucket.valueOf();
 		} else {++probeIndex; continue;}
 	}
 }
@@ -283,9 +290,9 @@ std::ostream & operator<<(std::ostream &os, const HashTable &hashTable) {
 	size_t printedBuckets = 0;
 	os << std::string{"["};
 	for (size_t bucketIndex = 0; bucketIndex < hashTable.capacity(); ++bucketIndex) {
-		if (printedBuckets > 0) {os << std::string{", "};}
 		HashTableBucket bucket = hashTable.tableData[bucketIndex];
 		if (!bucket.isEmpty()) {
+			if (printedBuckets > 0) {os << std::string{", "};}
 			os << bucketIndex << std::string{": "} << bucket;
 			++printedBuckets;
 		}

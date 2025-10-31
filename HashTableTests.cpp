@@ -209,7 +209,7 @@ int main(int, char**) {
 
 		auto dupKey = make_key<key_type>(MAXHASH / 3);
 		auto dupVal = make_value<value_type>(MAXHASH / 3);
-		OUTSTREAM << "Attempting duplicate insert of " << dupKey << ", " << dupVal << ">..." << endl;
+		OUTSTREAM << "Attempting duplicate insert of <" << dupKey << ", " << dupVal << ">..." << endl;
 		bool duplicateResult = ht1.insert(dupKey, dupVal);
 		OUTSTREAM << (duplicateResult ? "FAILURE : duplicate was inserted (should be rejected)."
 				: "SUCCESS: duplicate correctly rejected.")
@@ -235,7 +235,7 @@ int main(int, char**) {
 		for (size_t i = 1; i <= MAXHASH; i++) {
 			bool r = ht1.insert(make_key<key_type>(i), make_value<value_type>(i));
 			OUTSTREAM << "  insert (" << make_key<key_type>(i) << ", " << make_value<value_type>(i)
-					<< ") ->" << (r ? "true" : "false") << endl;
+					<< ") -> " << (r ? "true" : "false") << endl;
 			ok &= r;
 		}
 
@@ -245,7 +245,7 @@ int main(int, char**) {
 		for (size_t i = MAXHASH + 1; i <= 2 * MAXHASH; i++) {
 			bool r = ht1.insert(make_key<key_type>(i), make_value<value_type>(i));
 			OUTSTREAM << "  insert (" << make_key<key_type>(i) << ", " << make_value<value_type>(i)
-					<< ") ->" << (r ? "true" : "false") << endl;
+					<< ") -> " << (r ? "true" : "false") << endl;
 			ok &= r;
 		}
 
@@ -273,8 +273,9 @@ int main(int, char**) {
 		HashTable ht1;
 		bool ok = true;
 
-		OUTSTREAM << "Inserting " << MAXHASH << "entries..." << endl;
+		OUTSTREAM << "Inserting " << MAXHASH << " entries..." << endl;
 		for (size_t i = 1; i <= MAXHASH; i++) {
+			ht1.insert(make_key<key_type>(i), make_value<value_type>(i));
 			auto k = make_key<key_type>(i);
 			auto r = ht1.remove(k);
 			OUTSTREAM << "  remove(" << k << ") -> " << (r ? "true" : "false") << endl;
@@ -527,7 +528,7 @@ int main(int, char**) {
 		OUTSTREAM << "Removing key " << remKey << " and then calling get()..." << endl;
 		ht1.remove(remKey);
 		std::optional<value_type> res = ht1.get(remKey);
-		OUTSTREAM << (!res ? "SUCCESS: get() returned nullpot after removal."
+		OUTSTREAM << (!res ? "SUCCESS: get() returned nullopt after removal."
 				: "FAILURE: get() still returned a value after removal.")
 				<< endl << endl;
 	} catch (exception& e) {

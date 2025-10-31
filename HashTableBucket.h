@@ -30,16 +30,11 @@ class HashTableBucket {
 		};
 
 		std::string key;
+		size_t value;
 		BucketType bucketType;
 
 	public:
 		using enum BucketType;
-
-		/**
-		 *	This bucket's value can be both accessed and mutated by reference
-		 *	due to required functionality for `HashTable`.
-		 */
-		size_t value;
 
 		HashTableBucket();
 		HashTableBucket(const std::string &key, const size_t &value);
@@ -47,6 +42,7 @@ class HashTableBucket {
 		void load(const std::string &key, const size_t &value);
 
 		std::string getKey() const;
+		size_t & valueOf();
 
 		void makeNormal();
 		void makeESS();
